@@ -6,4 +6,8 @@
     <RootNamespace>AGLW_CSharp_BetterChatServerSample</RootNamespace>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="devio.amazon.gamelift.server.lib.collection" Version="0.0.1" />
+  </ItemGroup>
+
 </Project>
