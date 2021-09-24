@@ -137,18 +137,30 @@ namespace AGLW_CSharp_BetterChatServerSample
 
                 SleepForAWhile();
 
+                List<ConnectedClient> disconnectedClients = new List<ConnectedClient>();
+                
                 byte[] bytes = new byte[MessageLength];
                 foreach (var c in clientPool)
                 {
-                    if (c != null)
+                    if (c != null && c.TargetClient.Connected)
                     {
                         if (c.RetrieveMessage(out bytes))
                         {
                             messagePool.Enqueue(bytes);
                         }
                     }
-
+                    else
+                    {
+                        disconnectedClients.Add(c);
+                    }
                 }
+
+                // Release disconnected client object
+                foreach (var dc in disconnectedClients)
+                {
+                    clientPool.Remove(dc);
+                }
+
             }
         }
 
