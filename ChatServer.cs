@@ -119,6 +119,7 @@ namespace AGLW_CSharp_BetterChatServerSample
                     byte[] bytes = new byte[MessageLength];
                     if (messagePool.TryDequeue(out bytes))
                     {
+                        Console.WriteLine($"Message sent: {Encoder.GetString(bytes)}");
                         sendMsgDelegate(bytes);
                     }
                 }
@@ -158,6 +159,7 @@ namespace AGLW_CSharp_BetterChatServerSample
                 // Release disconnected client object
                 foreach (var dc in disconnectedClients)
                 {
+                    sendMsgDelegate -= dc.SendMessage;
                     clientPool.Remove(dc);
                 }
 

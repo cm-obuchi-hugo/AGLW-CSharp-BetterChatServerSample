@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using System.Collections.Generic;
 
 
@@ -79,9 +80,22 @@ namespace AGLW_CSharp_BetterChatServerSample
 
             if (TargetStream != null)
             {
-                while (TargetStream.Read(bytes) > 0)
+                try
                 {
-                    ReceivingQueue.Enqueue(bytes);
+                    while (TargetStream.Read(bytes) > 0)
+                    {
+                        Console.WriteLine($"Message Received: {Encoder.GetString(bytes)}");
+                        ReceivingQueue.Enqueue(bytes);
+                        bytes = new byte[ChatServer.MessageLength];
+                    }
+                }
+                catch(SocketException e)
+                {
+                    Console.WriteLine($"Excpetion catched : {e}");
+                }
+                catch(IOException e)
+                {
+                    Console.WriteLine($"Excpetion catched : {e}");
                 }
             }
         }
