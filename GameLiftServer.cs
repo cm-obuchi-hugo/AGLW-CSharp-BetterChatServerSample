@@ -13,14 +13,14 @@ namespace AGLW_CSharp_BetterChatServerSample
 {
     class GameLiftServer
     {
-        public Dictionary<string, ChatServer> Servers { get; private set; } = null;
+        public ChatServer Server { get; private set; } = null;
 
         // A instance's status flag of this class 
         public bool IsAlive { get; private set; } = false;
 
         public GameLiftServer()
         {
-            Servers = new Dictionary<string, ChatServer>();
+
         }
 
         //This is an example of a simple integration with GameLift server SDK that will make game server processes go active on GameLift!
@@ -72,8 +72,7 @@ namespace AGLW_CSharp_BetterChatServerSample
 
         void OnStartGameSession(GameSession gameSession)
         {
-            ChatServer server = new ChatServer(gameSession);
-            Servers.Add(gameSession.GameSessionId, server);
+            Server = new ChatServer(gameSession);
 
             //When a game session is created, GameLift sends an activation request to the game server and passes along the game session object containing game properties and other settings.
             //Here is where a game server should take action based on the game session object.
@@ -84,12 +83,8 @@ namespace AGLW_CSharp_BetterChatServerSample
 
         void OnUpdateGameSession(UpdateGameSession updateGameSession)
         {
-            ChatServer server = null;
-            if (Servers.TryGetValue(updateGameSession.GameSession.GameSessionId, out server))
-            {
-                server.UpdateGameSession(updateGameSession.GameSession);
-                // Do sth more for server?
-            }
+            Server.UpdateGameSession(updateGameSession.GameSession);
+            // Do sth more for server?
 
             //When a game session is updated (e.g. by FlexMatch backfill), GameLiftsends a request to the game
             //server containing the updated game session object.  The game server can then examine the provided
